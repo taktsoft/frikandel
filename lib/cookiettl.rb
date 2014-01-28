@@ -17,21 +17,19 @@ module Cookiettl
       append_after_filter :persist_session_timestamp
     end
 
-    SESSION_MAX_TTL ||= 10.minutes #24.hours
+    SESSION_MAX_TTL ||= 24.hours
     SESSION_TTL ||= 2.hours
 
     def validate_session_timestamp
-      puts "ttl = " + SESSION_MAX_TTL.to_s
-      if current_user? && session.key?(:ttl) && (session[:ttl] < SESSION_TTL.ago || session[:ttl] < SESSION_MAX_TTL.ago)
+      if session.key?(:ttl) && (session[:ttl] < SESSION_TTL.ago || session[:ttl] < SESSION_MAX_TTL.ago)
         reset_session
-        @current_user = nil
-        redirect_to login_path
+        redirect_to root_path
       end
     end
 
     def persist_session_timestamp
-      session[:ttl] = Time.now if current_user?
+      session[:ttl] = Time.now
+      session[:max_ttl] ||= SESSION_MAX_TTL.from_now
     end
-
   end
 end

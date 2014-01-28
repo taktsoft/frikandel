@@ -1,8 +1,7 @@
 require "spec_helper"
 
 Rails.application.routes.draw do
-  get "/home" => "application#home"
-  get "/login" => "application#home", as: 'login'
+  get "/home" => "application#home", as: :root
 end
 
 class ApplicationController < ActionController::Base
@@ -21,7 +20,7 @@ describe ApplicationController do
     controller.stub(:current_user).and_return(User.new)
   end
 
-  it "holds the session for at least a .1 seconds" do
+  it "holds the session for at least .1 seconds" do
     get :home
     session[:user_id] = 1337
     sleep 0.1

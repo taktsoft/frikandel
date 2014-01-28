@@ -658,3 +658,79 @@ Processing by ApplicationController#home as HTML
 Redirected to http://test.host/login
 Filter chain halted as :validate_session_timestamp rendered or redirected
 Completed 302 Found in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+  Rendered text template (0.1ms)
+Completed 200 OK in 5ms (Views: 4.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/login
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 1ms (Views: 4.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/login
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 0ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/login
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 2ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+  Rendered text template (0.0ms)
+Completed 200 OK in 6ms (Views: 4.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 500 Internal Server Error in 2ms
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 500 Internal Server Error in 2ms
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 500 Internal Server Error in 2ms
+Processing by ApplicationController#home as HTML
+  Rendered text template (0.0ms)
+Completed 200 OK in 6ms (Views: 4.7ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+  Rendered text template (0.0ms)
+Completed 200 OK in 1ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/home
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.3ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/home
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Completed 200 OK in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms)
+Processing by ApplicationController#home as HTML
+Redirected to http://test.host/home
+Filter chain halted as :validate_session_timestamp rendered or redirected
+Completed 302 Found in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms)
