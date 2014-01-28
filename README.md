@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-Add the following lines to your `application.rb`:
+Add an initializer namend `cookiettl.rb` and insert the following lines:
 
     Cookiettl::Configuration.max_ttl = 1.day
     Cookiettl::Configuration.ttl = 2.hours
