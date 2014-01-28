@@ -4,8 +4,8 @@ require 'rspec/rails'
 require 'pry'
 
 # Configure the Gem
-Cookiettl::Filter::SESSION_MAX_TTL = 1.day
-Cookiettl::Filter::SESSION_TTL = 2.hours
+Cookiettl::Configuration.max_ttl = 1.day
+Cookiettl::Configuration.ttl = 2.hours
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

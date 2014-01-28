@@ -15,10 +15,6 @@ end
 class User; end
 
 describe ApplicationController do
-  before :each do
-    controller.stub(:current_user?).and_return(true)
-    controller.stub(:current_user).and_return(User.new)
-  end
 
   it "holds the session for at least .1 seconds" do
     get :home
@@ -33,8 +29,7 @@ describe ApplicationController do
   it "destroys the session after SESSION_TTL" do
     get :home
     session[:user_id] = 2337
-
-    request.session[:ttl] = (Cookiettl::Filter::SESSION_TTL + 1.minute).seconds.ago
+    request.session[:ttl] = (Cookiettl::Configuration.ttl + 1.minute).seconds.ago
     get :home
 
     session[:user_id].should be_blank
@@ -44,7 +39,7 @@ describe ApplicationController do
     get :home
     session[:user_id] = 3337
 
-    request.session[:ttl] = (Cookiettl::Filter::SESSION_MAX_TTL + 1.minute).seconds.ago
+    request.session[:max_ttl] = 1.minute.ago
     get :home
 
     session[:user_id].should be_blank
@@ -60,9 +55,8 @@ describe ApplicationController do
   end
 
   it "is configurable" do
-    old_value = Cookiettl::Filter::SESSION_MAX_TTL
-
-    Cookiettl::Filter::SESSION_MAX_TTL = 1.minute
+    old_value = Cookiettl::Configuration.ttl
+    Cookiettl::Configuration.ttl = 1.minute
     get :home
     session[:ttl] = 30.minutes.ago
     session[:user_id] = 5337
@@ -70,6 +64,6 @@ describe ApplicationController do
     get :home
     session[:user_id].should be_blank
 
-    Cookiettl::Filter::SESSION_MAX_TTL = old_value
+    Cookiettl::Configuration.ttl = old_value
   end
 end
