@@ -10,7 +10,9 @@ Rails 3 or 4 is currently supported.
 
 Add this line to your application's Gemfile:
 
-    gem 'cookiettl'
+```ruby
+gem 'cookiettl'
+```
 
 And then execute:
 
@@ -33,7 +35,7 @@ The value at `Cookiettl::Configuration.max_ttl` is the absolute value that a coo
 
 The second value `Cookiettl::Configuration.ttl` states how long a session/cookie is valid, when the cookie timestamp gets not refreshed. The timestamp gets refrehed everytime a user visits the site.
 
-### Customize on_expired behavior
+#### Customize on_expired behavior
 You can also overwrite what should happen when a cookie times out on the controller-level.
 For example, if you want to overwrite the default behavior (= reset the session) when a user is on the `PublicController`, you want to overwrite the `on_expired_cookie`-method in your Controller:
 
@@ -46,6 +48,7 @@ end
 ```
 
 If you want to revert the original behavior in a child of your `PublicController`, you simply re-alias the method to `original_on_expired_cookie` like this:
+
 ```ruby
 class AdminController < PublicController
   alias on_expired_cookie original_on_expired_cookie
