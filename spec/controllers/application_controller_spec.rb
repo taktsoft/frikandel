@@ -1,18 +1,5 @@
 require "spec_helper"
-
-Rails.application.routes.draw do
-  get "/home" => "application#home", as: :root
-end
-
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-
-  def home
-    render text: "testing"
-  end
-end
-
-class User; end
+require "support/application_controller"
 
 describe ApplicationController do
 

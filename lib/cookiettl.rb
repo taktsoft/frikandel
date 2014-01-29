@@ -30,8 +30,7 @@ module Cookiettl
 
     def validate_session_timestamp
       if session.key?(:ttl) && session.key?(:max_ttl) && (session[:ttl] < Cookiettl::Configuration.ttl.ago || session[:max_ttl] < Time.now)
-        reset_session
-        redirect_to root_path
+        on_expired_cookie
       end
     end
 
@@ -39,5 +38,11 @@ module Cookiettl
       session[:ttl] = Time.now
       session[:max_ttl] ||= Cookiettl::Configuration.max_ttl.from_now
     end
+
+    def on_expired_cookie
+      reset_session
+      redirect_to root_path
+    end
+    alias original_on_expired_cookie on_expired_cookie
   end
 end
