@@ -1,6 +1,6 @@
 # Cookiettl
 
-This Gem adds a TTL (Time To Live) Date into every cookie that your application sets. When the cookie has expired, the users session gets reset. This should help protect from Session Fixation.
+This Gem adds a TTL (Time To Live) Date to every cookie that your application sets. When the cookie has expired, the users session gets reset. This should help protect from Session-Fixation-Attacks.
 
 ## Requirements
 
