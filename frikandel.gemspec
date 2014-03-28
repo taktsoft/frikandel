@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cookiettl/version'
+require 'frikandel/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "cookiettl"
-  spec.version       = Cookiettl::VERSION
+  spec.name          = "frikandel"
+  spec.version       = Frikandel::VERSION
   spec.authors       = ["Michael Berg"]
   spec.email         = ["berg@taktsoft.com"]
   spec.summary       = %q{This gem adds a ttl to the session cookie of your application.}

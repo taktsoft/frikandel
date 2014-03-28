@@ -1,6 +1,6 @@
-require "cookiettl/version"
+require "frikandel/version"
 
-module Cookiettl
+module Frikandel
   class Configuration
     include Singleton
     extend SingleForwardable
@@ -25,18 +25,18 @@ module Cookiettl
       append_after_filter :persist_session_timestamp
     end
 
-    Cookiettl::Configuration.max_ttl ||= 24.hours
-    Cookiettl::Configuration.ttl ||= 2.hours
+    Frikandel::Configuration.max_ttl ||= 24.hours
+    Frikandel::Configuration.ttl ||= 2.hours
 
     def validate_session_timestamp
-      if session.key?(:ttl) && session.key?(:max_ttl) && (session[:ttl] < Cookiettl::Configuration.ttl.ago || session[:max_ttl] < Time.now)
+      if session.key?(:ttl) && session.key?(:max_ttl) && (session[:ttl] < Frikandel::Configuration.ttl.ago || session[:max_ttl] < Time.now)
         on_expired_cookie
       end
     end
 
     def persist_session_timestamp
       session[:ttl] = Time.now
-      session[:max_ttl] ||= Cookiettl::Configuration.max_ttl.from_now
+      session[:max_ttl] ||= Frikandel::Configuration.max_ttl.from_now
     end
 
     def on_expired_cookie

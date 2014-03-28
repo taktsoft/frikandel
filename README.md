@@ -1,4 +1,4 @@
-# Cookiettl
+# Frikandel
 
 This Gem adds a TTL (Time To Live) Date to every cookie that your application sets. When the cookie has expired, the users session gets reset. This should help protect from Session-Fixation-Attacks.
 
@@ -11,7 +11,7 @@ Rails 3 or 4 is currently supported.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'cookiettl'
+gem 'frikandel'
 ```
 
 And then execute:
@@ -20,20 +20,20 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install cookiettl
+    $ gem install frikandel
 
 ## Usage
 
-Add an initializer namend `cookiettl.rb` and insert the following lines:
+Add an initializer namend `frikandel.rb` and insert the following lines:
 
 ```ruby
-Cookiettl::Configuration.max_ttl = 1.day
-Cookiettl::Configuration.ttl = 2.hours
+Frikandel::Configuration.max_ttl = 1.day
+Frikandel::Configuration.ttl = 2.hours
 ```
 
-The value at `Cookiettl::Configuration.max_ttl` is the absolute value that a cookie is valid. In this example, all cookies will be invalidated after one day.
+The value at `Frikandel::Configuration.max_ttl` is the absolute value that a cookie is valid. In this example, all cookies will be invalidated after one day.
 
-The second value `Cookiettl::Configuration.ttl` states how long a session/cookie is valid, when the cookie timestamp gets not refreshed. The timestamp gets refrehed everytime a user visits the site.
+The second value `Frikandel::Configuration.ttl` states how long a session/cookie is valid, when the cookie timestamp gets not refreshed. The timestamp gets refrehed everytime a user visits the site.
 
 #### Customize on_expired behavior
 You can also overwrite what should happen when a cookie times out on the controller-level.

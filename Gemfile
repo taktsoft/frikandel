@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in cookiettl.gemspec
+# Specify your gem's dependencies in frikandel.gemspec
 gemspec

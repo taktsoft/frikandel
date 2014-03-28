@@ -1,4 +1,4 @@
-Copyright (c) 2014 Michael Berg
+Copyright (c) 2014 Taktsoft
 
 MIT License
 

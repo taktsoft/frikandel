@@ -16,7 +16,7 @@ describe ApplicationController do
   it "destroys the session after SESSION_TTL" do
     get :home
     session[:user_id] = 2337
-    request.session[:ttl] = (Cookiettl::Configuration.ttl + 1.minute).seconds.ago
+    request.session[:ttl] = (Frikandel::Configuration.ttl + 1.minute).seconds.ago
     get :home
 
     session[:user_id].should be_blank
@@ -42,8 +42,8 @@ describe ApplicationController do
   end
 
   it "is configurable" do
-    old_value = Cookiettl::Configuration.ttl
-    Cookiettl::Configuration.ttl = 1.minute
+    old_value = Frikandel::Configuration.ttl
+    Frikandel::Configuration.ttl = 1.minute
     get :home
     session[:ttl] = 30.minutes.ago
     session[:user_id] = 5337
@@ -51,6 +51,6 @@ describe ApplicationController do
     get :home
     session[:user_id].should be_blank
 
-    Cookiettl::Configuration.ttl = old_value
+    Frikandel::Configuration.ttl = old_value
   end
 end
