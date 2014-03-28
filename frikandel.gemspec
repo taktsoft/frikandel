@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Michael Berg"]
   spec.email         = ["berg@taktsoft.com"]
   spec.summary       = %q{This gem adds a ttl to the session cookie of your application.}
-  spec.description   = ""
-  spec.homepage      = ""
+  spec.description   = spec.summary
+  spec.homepage      = "https://github.com/taktsoft/#{spec.name}"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

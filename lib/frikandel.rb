@@ -2,7 +2,6 @@ require "frikandel/version"
 require "frikandel/configuration"
 
 module Frikandel
-
   module LimitSessionLifetime
     extend ActiveSupport::Concern
 

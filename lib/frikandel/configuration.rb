@@ -2,6 +2,7 @@ module Frikandel
   class Configuration
     include Singleton
     extend SingleForwardable
+
     attr_accessor :ttl, :max_ttl
 
     def_delegators :instance, :defaults!, :ttl, :ttl=, :max_ttl, :max_ttl=
