@@ -1,28 +1,28 @@
 require "spec_helper"
 require "support/application_controller"
 
-class CookieExpiredError < StandardError; end
+class SessionExpiredError < StandardError; end
 
-class CustomizedOnExpiredCookieController < ApplicationController
-  def on_expired_cookie
-    raise CookieExpiredError.new("Your Cookie is DEAD!")
+class CustomizedOnExpiredSessionController < ApplicationController
+  def on_expired_session
+    raise SessionExpiredError.new("Your Session is DEAD!")
   end
-  alias my_on_expired_cookie on_expired_cookie
+  alias my_on_expired_session on_expired_session
 end
 
-describe CustomizedOnExpiredCookieController do
+describe CustomizedOnExpiredSessionController do
 
   it "uses the overwritten on_expired_cookie function" do
     get :home
     request.session[:max_ttl] = 1.minute.ago
 
-    expect { get :home }.to raise_error CookieExpiredError
+    expect { get :home }.to raise_error SessionExpiredError
   end
 
   it "can revert the on_expired_cookie function back to the original" do
-    # NOTE: Don't confuse original_on_expired_cookie with my_on_expired_cookie!
-    class CustomizedOnExpiredCookieController < ApplicationController
-      alias on_expired_cookie original_on_expired_cookie # Setting it to the Gems original
+    # NOTE: Don't confuse original_on_expired_session with my_on_expired_session!
+    class CustomizedOnExpiredSessionController < ApplicationController
+      alias on_expired_session original_on_expired_session # Setting it to the Gems original
     end
 
     get :home
@@ -31,8 +31,8 @@ describe CustomizedOnExpiredCookieController do
     begin
       expect { get :home }.to_not raise_error
     ensure
-      class CustomizedOnExpiredCookieController < ApplicationController
-        alias on_expired_cookie my_on_expired_cookie # Reverting it back to the Customized function thats defined in this test
+      class CustomizedOnExpiredSessionController < ApplicationController
+        alias on_expired_session my_on_expired_session # Reverting it back to the Customized function thats defined in this test
       end
     end
   end

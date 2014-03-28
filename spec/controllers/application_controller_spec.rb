@@ -53,4 +53,5 @@ describe ApplicationController do
 
     Frikandel::Configuration.ttl = old_value
   end
+
 end

@@ -3,10 +3,6 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'pry'
 
-# Configure the Gem
-Frikandel::Configuration.max_ttl = 1.day
-Frikandel::Configuration.ttl = 2.hours
-
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -18,4 +14,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.before(:each) do
+    Frikandel::Configuration.defaults!
+  end
 end

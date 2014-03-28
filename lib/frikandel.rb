@@ -1,23 +1,9 @@
 require "frikandel/version"
+require "frikandel/configuration"
 
 module Frikandel
-  class Configuration
-    include Singleton
-    extend SingleForwardable
-    attr_accessor :ttl, :max_ttl
 
-    def_delegators :instance, :ttl, :ttl=, :max_ttl, :max_ttl=
-  end
-
-  class Railtie < Rails::Railtie
-    initializer "cookie-ttl.add_filter_to_application_controller" do
-      ActiveSupport.on_load(:action_controller) do
-        ActionController::Base.send(:include, Filter)
-      end
-    end
-  end
-
-  module Filter
+  module LimitSessionLifetime
     extend ActiveSupport::Concern
 
     included do
@@ -25,12 +11,11 @@ module Frikandel
       append_after_filter :persist_session_timestamp
     end
 
-    Frikandel::Configuration.max_ttl ||= 24.hours
-    Frikandel::Configuration.ttl ||= 2.hours
+  private
 
     def validate_session_timestamp
       if session.key?(:ttl) && session.key?(:max_ttl) && (session[:ttl] < Frikandel::Configuration.ttl.ago || session[:max_ttl] < Time.now)
-        on_expired_cookie
+        on_expired_session
       end
     end
 
@@ -39,10 +24,10 @@ module Frikandel
       session[:max_ttl] ||= Frikandel::Configuration.max_ttl.from_now
     end
 
-    def on_expired_cookie
+    def on_expired_session
       reset_session
       redirect_to root_path
     end
-    alias original_on_expired_cookie on_expired_cookie
+    alias original_on_expired_session on_expired_session
   end
 end
