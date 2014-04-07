@@ -1,6 +1,6 @@
 # Frikandel
 [![Gem Version](https://badge.fury.io/rb/frikandel.png)](http://badge.fury.io/rb/frikandel) 
-[![Build Status](https://travis-ci.org/taktsoft/extreme_feedback_device.png)](https://travis-ci.org/taktsoft/frikandel)
+[![Build Status](https://api.travis-ci.org/taktsoft/frikandel.png)](https://travis-ci.org/taktsoft/frikandel)
 
 This Gem adds a TTL (Time To Live) Date to every cookie that your application sets. When the cookie has expired, the users session gets reset. This should help protect from Session-Fixation-Attacks.
 
