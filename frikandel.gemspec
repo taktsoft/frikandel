@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "sqlite3" unless RUBY_PLATFORM == 'java'
   spec.add_development_dependency "jdbc-sqlite3" if RUBY_PLATFORM == 'java'
+  spec.add_development_dependency "activerecord-jdbcsqlite3-adapter" if RUBY_PLATFORM == 'java'
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "pry"
