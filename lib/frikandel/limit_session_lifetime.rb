@@ -13,6 +13,8 @@ module Frikandel
     def validate_session_timestamp
       if session.key?(:ttl) && session.key?(:max_ttl) && (session[:ttl] < Frikandel::Configuration.ttl.ago || session[:max_ttl] < Time.now)
         on_invalid_session
+      elsif !session.key?(:ttl) && !session.key?(:max_ttl)
+        reset_session
       end
     end
 
