@@ -1,13 +1,11 @@
 
 Rails.application.routes.draw do
-  get "/home" => "application#home", as: :root
+  root to: "application#home"
+  get "/limit_session_lifetime_home" => "limit_session_lifetime#home"
   get "/customized_controller_home" => "customized_on_expired_session#home", as: :customized_controller_home
 end
 
-
 class ApplicationController < ActionController::Base
-  include Frikandel::LimitSessionLifetime
-
   protect_from_forgery with: :exception
 
   def home

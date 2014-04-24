@@ -4,6 +4,8 @@ require "support/application_controller"
 class SessionExpiredError < StandardError; end
 
 class CustomizedOnExpiredSessionController < ApplicationController
+  include Frikandel::LimitSessionLifetime
+
   def on_expired_session
     raise SessionExpiredError.new("Your Session is DEAD!")
   end

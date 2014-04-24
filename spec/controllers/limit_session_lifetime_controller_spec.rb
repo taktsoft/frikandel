@@ -1,8 +1,11 @@
 require "spec_helper"
 require "support/application_controller"
 
-describe ApplicationController do
+class LimitSessionLifetimeController < ApplicationController
+  include Frikandel::LimitSessionLifetime
+end
 
+describe LimitSessionLifetimeController do
   it "holds the session for at least .1 seconds" do
     get :home
     session[:user_id] = 1337
