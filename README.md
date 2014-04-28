@@ -71,7 +71,7 @@ The default values are `24.hours` for `max_ttl` and `2.hours` for `ttl`. If you 
 
 ### Customize on_invalid_session behavior
 
-You can also overwrite what should happen when a cookie times out on the controller-level. The default behaviour is to do a `reset_session` and `redirect_to root_path`. For example, if you want to overwrite the default behavior when a user is on the `PublicController`, you want to overwrite the `on_expired_session`-method in your controller:
+You can also overwrite what should happen when a cookie times out on the controller-level. The default behaviour is to do a `reset_session` and `redirect_to root_path`. For example, if you want to overwrite the default behavior when a user is on the `PublicController`, you want to overwrite the `on_invalid_session`-method in your controller:
 
 ```ruby
 class PublicController < ApplicationController
