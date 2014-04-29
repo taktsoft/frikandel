@@ -16,6 +16,8 @@ module Frikandel
       elsif !session.key?(:ttl) || !session.key?(:max_ttl)
         reset_session_with_limit_session_lifetime_style
         persist_session_timestamp
+      else
+        @_frikandel_did_validate_session_timestamp = true
       end
     end
 
@@ -30,11 +32,20 @@ module Frikandel
     def persist_session_timestamp
       session[:ttl] = Time.now
       session[:max_ttl] ||= Frikandel::Configuration.max_ttl.from_now
+      @_frikandel_did_persist_session_timestamp = true
+    end
+
+    def frikandel_did_bind_session_to_ip_address?
+      @_frikandel_did_validate_session_ip_address || @_frikandel_did_persist_session_ip_address
     end
 
     def reset_session_with_limit_session_lifetime_style
       unless @_frikandel_did_reset_session
-        stored_ip_address = session[:ip_address]
+        stored_ip_address = nil
+
+        if frikandel_did_bind_session_to_ip_address?
+          stored_ip_address = session[:ip_address]
+        end
 
         reset_session
         @_frikandel_did_reset_session = true
