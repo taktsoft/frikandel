@@ -19,3 +19,18 @@ RSpec.configure do |config|
     Frikandel::Configuration.defaults!
   end
 end
+
+
+# some helper methods
+
+def simulate_redirect!(from_action, to_action)
+  get from_action.intern
+
+  controller.instance_variable_set(:@_frikandel_did_reset_session, nil) # reset state for redirect request
+
+  get to_action.intern
+end
+
+def flash
+  session[:flash]
+end
