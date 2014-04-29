@@ -25,12 +25,14 @@ end
 
 def simulate_redirect!(from_action, to_action)
   get from_action.intern
+  from_flash = request.flash # HACK for RAILS_VERSION=3.2.0
 
   controller.instance_variable_set(:@_frikandel_did_reset_session, nil) # reset state for redirect request
 
   get to_action.intern
+  request.flash.update(from_flash.to_hash) # HACK for RAILS_VERSION=3.2.0
 end
 
 def flash
-  session[:flash]
+  request.flash
 end

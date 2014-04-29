@@ -18,6 +18,7 @@ protected
 
   def flash_alert_and_redirect_home
     flash[:alert] = "alert test"
+
     redirect_to limit_session_lifetime_home_url
   end
 end

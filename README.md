@@ -95,6 +95,16 @@ end
 2.1.0 -- Reset session only once if using the combination of TTL and IP address binding.
 2.0.0 -- Added IP address binding. Renamed callback from 'on_expired_session' to 'on_invalid_session'.
 
+## Test
+
+To run the test suite with different rails version, you can use this one liners:
+
+    $ export RAILS_VERSION=3.2.0; bundle update && bundle exec rake spec
+    $ export RAILS_VERSION=4.0.0; bundle update && bundle exec rake spec
+    $ export RAILS_VERSION=4.1.0; bundle update && bundle exec rake spec
+
+Credits for this go to http://www.schneems.com/post/50991826838/testing-against-multiple-rails-versions/
+
 ## Contributing
 1. Fork it
 2. Create your feature branch (git checkout -b my-new-feature)
