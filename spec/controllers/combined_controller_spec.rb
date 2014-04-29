@@ -60,7 +60,7 @@ describe CombinedController do
       session[:max_ttl].should be_present
       session[:ip_address].should be_present
 
-      flash.should be_key(:alert)
+      flash.should_not be_empty
       flash[:alert].should eql("alert test")
     end
   end

@@ -40,7 +40,7 @@ describe BindSessionToIpAddressController do
 
       expect(session[:ip_address]).to eql("0.0.0.0")
 
-      flash.should be_key(:alert)
+      flash.should_not be_empty
       flash[:alert].should eql("alert test")
     end
 

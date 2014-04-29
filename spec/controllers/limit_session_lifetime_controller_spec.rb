@@ -44,7 +44,7 @@ describe LimitSessionLifetimeController do
       expect(session[:ttl]).to be_a(Time)
       expect(session[:max_ttl]).to be_a(Time)
 
-      flash.should be_key(:alert)
+      flash.should_not be_empty
       flash[:alert].should eql("alert test")
     end
 
