@@ -92,7 +92,16 @@ end
 
 ## Changes
 
-2.0.0 Added IP address binding. Renamed callback from 'on_expired_session' to 'on_invalid_session'.
+2.x.x -- Reset session only once if using the combination of TTL and IP address binding.
+2.0.0 -- Added IP address binding. Renamed callback from 'on_expired_session' to 'on_invalid_session'.
+
+## Test
+
+To run the test suite with different rails version by selecting the corresponding gemfile. You can use this one liners:
+
+    $ BUNDLE_GEMFILE=Gemfile.rails-3.2.x bundle update && bundle exec rake spec
+    $ BUNDLE_GEMFILE=Gemfile.rails-4.0.x bundle update && bundle exec rake spec
+    $ BUNDLE_GEMFILE=Gemfile.rails-4.1.x bundle update && bundle exec rake spec
 
 ## Contributing
 1. Fork it

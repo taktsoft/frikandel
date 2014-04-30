@@ -1,7 +1,9 @@
+require 'singleton'
+
 module Frikandel
   class Configuration
-    include Singleton
-    extend SingleForwardable
+    include ::Singleton
+    extend ::SingleForwardable
 
     attr_accessor :ttl, :max_ttl
 
