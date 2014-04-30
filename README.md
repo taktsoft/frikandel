@@ -92,7 +92,7 @@ end
 
 ## Changes
 
-2.1.0 -- Reset session only once if using the combination of TTL and IP address binding.
+2.x.x -- Reset session only once if using the combination of TTL and IP address binding.
 2.0.0 -- Added IP address binding. Renamed callback from 'on_expired_session' to 'on_invalid_session'.
 
 ## Test
