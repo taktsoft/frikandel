@@ -53,34 +53,21 @@ describe BindSessionToIpAddressController do
 
 
     context "ip address isn't present in session" do
-      it "resets the session (if frikandel didn't limit session lifetime)" do
+      it "resets the session and persists the ip address" do
         session[:user_id] = 4337
         session.delete(:ip_address)
         session[:ttl] = "SomeTTL"
         session[:max_ttl] = "SomeMaxTTL"
 
-        controller.stub(:frikandel_did_limit_session_lifetime?).and_return(false)
+        controller.should_receive(:reset_session).and_call_original
+        controller.should_receive(:persist_session_ip_address).and_call_original
         get :home
 
         session[:user_id].should be_blank
         session[:ip_address].should be_present
+        session[:ip_address].should eql("0.0.0.0")
         session[:ttl].should be_blank
         session[:max_ttl].should be_blank
-      end
-
-      it "resets the session, but restores ttl and max_ttl if frikandel did limit session lifetime" do
-        session[:user_id] = 4337
-        session.delete(:ip_address)
-        session[:ttl] = "SomeTTL"
-        session[:max_ttl] = "SomeMaxTTL"
-
-        controller.stub(:frikandel_did_limit_session_lifetime?).and_return(true)
-        get :home
-
-        session[:user_id].should be_blank
-        session[:ip_address].should be_present
-        session[:ttl].should eql("SomeTTL")
-        session[:max_ttl].should eql("SomeMaxTTL")
       end
 
       it "allows the request to be rendered as normal" do
@@ -93,87 +80,75 @@ describe BindSessionToIpAddressController do
 
 
   context ".validate_session_ip_address" do
-    it "sets instance variable @_frikandel_did_validate_session_ip_address to true on pass" do
-      controller.send(:persist_session_ip_address) # to let the validation pass
+    it "calls on_invalid_session if ip address doesn't match with current" do
+      session[:ip_address] = "1.3.3.7"
 
-      expect {
-        controller.should_not_receive(:on_invalid_session)
-        controller.should_not_receive(:reset_session_with_bind_session_to_ip_address_style)
-        controller.should_not_receive(:persist_session_ip_address)
+      controller.should_receive(:ip_address_match_with_current?).and_return(false)
+      controller.should_receive(:on_invalid_session)
 
-        controller.send(:validate_session_ip_address)
-      }.to change {
-        controller.instance_variable_get(:@_frikandel_did_validate_session_ip_address)
-      }.from(nil).to(true)
+      controller.send(:validate_session_ip_address)
+    end
+
+    it "calls reset_session if ip address isn't persisted in session" do
+      session.delete(:ip_address)
+
+      controller.should_not_receive(:ip_address_match_with_current?)
+      controller.should_receive(:reset_session)
+
+      controller.send(:validate_session_ip_address)
+    end
+
+    it "calls persist_session_ip_address if validation passes" do
+      session[:ip_address] = "1.3.3.7"
+
+      controller.should_receive(:ip_address_match_with_current?).and_return(true)
+      controller.should_receive(:persist_session_ip_address)
+
+      controller.send(:validate_session_ip_address)
     end
   end
 
 
   context ".persist_session_ip_address" do
-    it "sets instance variable @_frikandel_did_persist_session_ip_address to true" do
+    it "sets the current ip address in session on key ip_address" do
       expect {
+        controller.should_receive(:current_ip_address).and_return("1.3.3.7")
         controller.send(:persist_session_ip_address)
       }.to change {
-        controller.instance_variable_get(:@_frikandel_did_persist_session_ip_address)
-      }.from(nil).to(true)
+        session[:ip_address]
+      }.from(nil).to("1.3.3.7")
     end
   end
 
 
-  context ".reset_session_with_bind_session_to_ip_address_style" do
-    it "sets instance variable @_frikandel_did_reset_session to true" do
-      session[:ttl] = "SomeTTL"
-      session[:max_ttl] = "SomeMaxTTL"
+  context ".current_ip_address" do
+    it "returns the remote_ip from request" do
+      request.should_receive(:remote_ip).and_return(:request_remote_ip)
 
-      expect {
-        controller.send(:reset_session_with_bind_session_to_ip_address_style)
-      }.to change {
-        controller.instance_variable_get(:@_frikandel_did_reset_session)
-      }.from(nil).to(true)
-
-      session[:ttl].should be_nil
-      session[:max_ttl].should be_nil
-    end
-
-    it "resets session only if instance variable @_frikandel_did_reset_session isn't true" do
-      controller.instance_variable_set(:@_frikandel_did_reset_session, true)
-      controller.should_not_receive(:reset_session)
-      controller.send(:reset_session_with_bind_session_to_ip_address_style)
-    end
-
-    it "resets session and restores ttl & max_ttl if frikandel did limit session lifetime" do
-      controller.stub(:frikandel_did_limit_session_lifetime?).and_return(true)
-
-      session[:ttl] = "SomeTTL"
-      session[:max_ttl] = "SomeMaxTTL"
-
-      controller.should_receive(:reset_session).and_call_original
-      controller.send(:reset_session_with_bind_session_to_ip_address_style)
-
-      session[:ttl].should eql("SomeTTL")
-      session[:max_ttl].should eql("SomeMaxTTL")
+      controller.send(:current_ip_address).should eql(:request_remote_ip)
     end
   end
 
 
-  context ".frikandel_did_limit_session_lifetime?" do
-    it "returns true if instance variable @_frikandel_did_validate_session_timestamp is true" do
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_validate_session_timestamp, true)
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_true
-    end
+  context ".ip_address_match_with_current?" do
+    it "compares ip address from session with the current ip address" do
+      controller.stub(:current_ip_address).and_return("1.3.3.7")
 
-    it "returns true if instance variable @_frikandel_did_persist_session_timestamp is true" do
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_persist_session_timestamp, true)
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_true
-    end
+      session[:ip_address] = "1.3.3.7"
 
-    it "returns false if used instance variables aren't true" do
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_validate_session_timestamp, nil)
-      controller.instance_variable_set(:@_frikandel_did_persist_session_timestamp, nil)
-      controller.send(:frikandel_did_limit_session_lifetime?).should be_false
+      controller.send(:ip_address_match_with_current?).should be_true
+
+      session[:ip_address] = "7.3.3.1"
+
+      controller.send(:ip_address_match_with_current?).should be_false
+    end
+  end
+
+
+  context ".reset_session" do
+    it "calls persist_session_ip_address" do
+      controller.should_receive(:persist_session_ip_address).and_call_original
+      controller.send(:reset_session)
     end
   end
 end

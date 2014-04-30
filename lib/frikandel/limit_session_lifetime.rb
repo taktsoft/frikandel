@@ -5,7 +5,6 @@ module Frikandel
 
     included do
       append_before_filter :validate_session_timestamp
-      append_after_filter :persist_session_timestamp
     end
 
   private
@@ -14,10 +13,9 @@ module Frikandel
       if session.key?(:ttl) && session.key?(:max_ttl) && (reached_ttl? || reached_max_ttl?)
         on_invalid_session
       elsif !session.key?(:ttl) || !session.key?(:max_ttl)
-        reset_session_with_limit_session_lifetime_style
+        reset_session
+      else # session timestamp is valid
         persist_session_timestamp
-      else
-        @_frikandel_did_validate_session_timestamp = true
       end
     end
 
@@ -31,27 +29,12 @@ module Frikandel
 
     def persist_session_timestamp
       session[:ttl] = Time.now
-      session[:max_ttl] ||= Frikandel::Configuration.max_ttl.from_now
-      @_frikandel_did_persist_session_timestamp = true
+      session[:max_ttl] ||= Frikandel::Configuration.max_ttl.since
     end
 
-    def frikandel_did_bind_session_to_ip_address?
-      @_frikandel_did_validate_session_ip_address || @_frikandel_did_persist_session_ip_address
-    end
-
-    def reset_session_with_limit_session_lifetime_style
-      unless @_frikandel_did_reset_session
-        stored_ip_address = nil
-
-        if frikandel_did_bind_session_to_ip_address?
-          stored_ip_address = session[:ip_address]
-        end
-
-        reset_session
-        @_frikandel_did_reset_session = true
-
-        session[:ip_address] = stored_ip_address if stored_ip_address.present?
-      end
+    def reset_session
+      super
+      persist_session_timestamp
     end
   end
 end

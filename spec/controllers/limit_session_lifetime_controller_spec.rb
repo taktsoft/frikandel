@@ -97,39 +97,29 @@ describe LimitSessionLifetimeController do
 
 
     context "ttl isn't present in session" do
-      it "resets the session (if frikandel didn't bind session to ip address)" do
+      it "resets the session and persists ttl & max_ttl" do
         session[:user_id] = 4337
         session[:ip_address] = "SomeIP"
         session.delete(:ttl)
         session[:max_ttl] = "SomeMaxTTL"
 
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(false)
+        controller.should_receive(:reset_session).and_call_original
+        controller.should_receive(:persist_session_timestamp).and_call_original
         get :home
 
         session[:user_id].should be_blank
         session[:ip_address].should be_blank
         session[:ttl].should be_present
+        session[:ttl].should be_a(Time)
         session[:max_ttl].should be_present
         session[:max_ttl].should_not eql("SomeMaxTTL")
-      end
-
-      it "resets the session, but keeps ip_address if frikandel did bind session to ip address" do
-        session[:user_id] = 4337
-        session[:ip_address] = "SomeIP"
-        session.delete(:ttl)
-        session[:max_ttl] = "SomeMaxTTL"
-
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(true)
-        get :home
-
-        session[:user_id].should be_blank
-        session[:ip_address].should eql("SomeIP")
-        session[:ttl].should be_present
-        session[:max_ttl].should be_present
-        session[:max_ttl].should_not eql("SomeMaxTTL")
+        session[:max_ttl].should be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
+        session.delete(:ttl)
+        session[:max_ttl] = "SomeMaxTTL"
+
         get :home
 
         response.body.should eql("ttl test")
@@ -138,39 +128,29 @@ describe LimitSessionLifetimeController do
 
 
     context "max_ttl isn't present in session" do
-      it "resets the session (if frikandel didn't bind session to ip address)" do
+      it "resets the session and persists ttl & max_ttl" do
         session[:user_id] = 4337
         session[:ip_address] = "SomeIP"
         session[:ttl] = "SomeTTL"
         session.delete(:max_ttl)
 
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(false)
+        controller.should_receive(:reset_session).and_call_original
+        controller.should_receive(:persist_session_timestamp).and_call_original
         get :home
 
         session[:user_id].should be_blank
         session[:ip_address].should be_blank
         session[:ttl].should be_present
         session[:ttl].should_not eql("SomeTTL")
+        session[:ttl].should be_a(Time)
         session[:max_ttl].should be_present
-      end
-
-      it "resets the session, but keeps ip_address if frikandel did bind session to ip address" do
-        session[:user_id] = 4337
-        session[:ip_address] = "SomeIP"
-        session[:ttl] = "SomeTTL"
-        session.delete(:max_ttl)
-
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(true)
-        get :home
-
-        session[:user_id].should be_blank
-        session[:ip_address].should eql("SomeIP")
-        session[:ttl].should be_present
-        session[:ttl].should_not eql("SomeTTL")
-        session[:max_ttl].should be_present
+        session[:max_ttl].should be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
+        session[:ttl] = "SomeTTL"
+        session.delete(:max_ttl)
+
         get :home
 
         response.body.should eql("ttl test")
@@ -179,33 +159,28 @@ describe LimitSessionLifetimeController do
 
 
     context "ttl and max_ttl isn't present in session" do
-      it "resets the session (if frikandel didn't bind session to ip address)" do
+      it "resets the session and persists ttl & max_ttl" do
         session[:user_id] = 4337
         session[:ip_address] = "SomeIP"
+        session.delete(:ttl)
+        session.delete(:max_ttl)
 
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(false)
+        controller.should_receive(:reset_session).and_call_original
+        controller.should_receive(:persist_session_timestamp).and_call_original
         get :home
 
         session[:user_id].should be_blank
         session[:ip_address].should be_blank
         session[:ttl].should be_present
+        session[:ttl].should be_a(Time)
         session[:max_ttl].should be_present
-      end
-
-      it "resets the session, but keeps ip_address if frikandel did bind session to ip address" do
-        session[:user_id] = 4337
-        session[:ip_address] = "SomeIP"
-
-        controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(true)
-        get :home
-
-        session[:user_id].should be_blank
-        session[:ip_address].should eql("SomeIP")
-        session[:ttl].should be_present
-        session[:max_ttl].should be_present
+        session[:max_ttl].should be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
+        session.delete(:ttl)
+        session.delete(:max_ttl)
+
         get :home
 
         response.body.should eql("ttl test")
@@ -215,87 +190,183 @@ describe LimitSessionLifetimeController do
 
 
   context ".validate_session_timestamp" do
-    it "sets instance variable @_frikandel_did_validate_session_timestamp to true on pass" do
-      controller.send(:persist_session_timestamp) # to let the validation pass
+    it "calls on_invalid_session if ttl is reached" do
+      session[:ttl] = "SomeTTL"
+      session[:max_ttl] = "SomeMaxTTL"
 
-      expect {
-        controller.should_not_receive(:on_invalid_session)
-        controller.should_not_receive(:reset_session_with_limit_session_lifetime_style)
-        controller.should_not_receive(:persist_session_timestamp)
+      controller.should_receive(:reached_ttl?).and_return(true)
+      controller.stub(:reached_max_ttl?).and_return(false)
 
-        controller.send(:validate_session_timestamp)
-      }.to change {
-        controller.instance_variable_get(:@_frikandel_did_validate_session_timestamp)
-      }.from(nil).to(true)
+      controller.should_receive(:on_invalid_session)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls on_invalid_session if max_ttl is reached" do
+      session[:ttl] = "SomeTTL"
+      session[:max_ttl] = "SomeMaxTTL"
+
+      controller.stub(:reached_ttl?).and_return(false)
+      controller.should_receive(:reached_max_ttl?).and_return(true)
+
+      controller.should_receive(:on_invalid_session)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls on_invalid_session if ttl and max_ttl are reached" do
+      session[:ttl] = "SomeTTL"
+      session[:max_ttl] = "SomeMaxTTL"
+
+      controller.stub(:reached_ttl?).and_return(true)
+      controller.stub(:reached_max_ttl?).and_return(true)
+
+      controller.should_receive(:on_invalid_session)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls reset_session if ttl isn't persisted in session" do
+      session.delete(:ttl)
+      session[:max_ttl] = "SomeMaxTTL"
+
+      controller.should_receive(:reset_session)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls reset_session if max_ttl isn't persisted in session" do
+      session[:ttl] = "SomeTTL"
+      session.delete(:max_ttl)
+
+      controller.should_receive(:persist_session_timestamp)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls reset_session if ttl and max_ttl aren't persisted in session" do
+      session.delete(:ttl)
+      session.delete(:max_ttl)
+
+      controller.should_receive(:persist_session_timestamp)
+
+      controller.send(:validate_session_timestamp)
+    end
+
+    it "calls persist_session_timestamp if validation passes" do
+      session[:ttl] = "SomeTTL"
+      session[:max_ttl] = "SomeMaxTTL"
+
+      controller.stub(:reached_ttl?).and_return(false)
+      controller.stub(:reached_max_ttl?).and_return(false)
+
+      controller.should_receive(:persist_session_timestamp)
+
+      controller.send(:validate_session_timestamp)
+    end
+  end
+
+
+  context ".reached_ttl?" do
+    it "returns true if persisted ttl is less than configured ttl seconds ago" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:ttl] = current_time.ago(Frikandel::Configuration.ttl + 1)
+
+      controller.send(:reached_ttl?).should be_true
+    end
+
+    it "returns false if persisted ttl is equal to configured ttl seconds ago" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:ttl] = current_time.ago(Frikandel::Configuration.ttl)
+
+      controller.send(:reached_ttl?).should be_false
+    end
+
+    it "returns false if persisted ttl is greater than configured ttl seconds ago" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:ttl] = current_time.ago(Frikandel::Configuration.ttl - 1)
+
+      controller.send(:reached_ttl?).should be_false
+    end
+  end
+
+
+  context ".reached_max_ttl?" do
+    it "returns true if persisted max_ttl is less than current time" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:max_ttl] = current_time.ago(1)
+
+      controller.send(:reached_max_ttl?).should be_true
+    end
+
+    it "returns false if persisted max_ttl is equal to current time" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:max_ttl] = current_time
+
+      controller.send(:reached_max_ttl?).should be_false
+    end
+
+    it "returns false if persisted max_ttl is greater than current time" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
+      session[:max_ttl] = current_time.since(1)
+
+      controller.send(:reached_max_ttl?).should be_false
     end
   end
 
 
   context ".persist_session_timestamp" do
-    it "sets instance variable @_frikandel_did_persist_session_timestamp to true" do
+    it "sets ttl to current time" do
+      current_time = Time.now
+      Time.stub(:now).and_return(current_time)
+
       expect {
         controller.send(:persist_session_timestamp)
       }.to change {
-        controller.instance_variable_get(:@_frikandel_did_persist_session_timestamp)
-      }.from(nil).to(true)
+        session[:ttl]
+      }.from(nil).to(current_time)
     end
-  end
 
-
-  context ".reset_session_with_limit_session_lifetime_style" do
-    it "sets instance variable @_frikandel_did_reset_session to true" do
-      session[:ip_address] = "SomeIP"
+    it "sets max_ttl to configured max_ttl seconds in future if it's blank" do
+      current_time = Time.now
+      max_ttl_time = current_time.since(Frikandel::Configuration.max_ttl)
+      Time.stub(:now).and_return(current_time)
 
       expect {
-        controller.send(:reset_session_with_limit_session_lifetime_style)
+        controller.send(:persist_session_timestamp)
       }.to change {
-        controller.instance_variable_get(:@_frikandel_did_reset_session)
-      }.from(nil).to(true)
-
-      session[:ip_address].should be_nil
+        session[:max_ttl]
+      }.from(nil).to(max_ttl_time)
     end
 
-    it "resets session only if instance variable @_frikandel_did_reset_session isn't true" do
-      session[:ip_address] = "SomeIP"
+    it "doesn't set max_ttl if it's present" do
+      session[:max_ttl] = "SomeMaxTTL"
 
-      controller.instance_variable_set(:@_frikandel_did_reset_session, true)
-      controller.should_not_receive(:reset_session)
-      controller.send(:reset_session_with_limit_session_lifetime_style)
-
-      session[:ip_address].should eql("SomeIP")
-    end
-
-    it "resets session and restores ip_address if frikandel did bind session to ip address" do
-      controller.stub(:frikandel_did_bind_session_to_ip_address?).and_return(true)
-
-      session[:ip_address] = "SomeIP"
-
-      controller.should_receive(:reset_session).and_call_original
-      controller.send(:reset_session_with_limit_session_lifetime_style)
-
-      session[:ip_address].should eql("SomeIP")
+      expect {
+        controller.send(:persist_session_timestamp) # second call, shouldn't change max_ttl
+        }.to_not change {
+          session[:max_ttl]
+        }.from("SomeMaxTTL")
     end
   end
 
 
-  context ".frikandel_did_bind_session_to_ip_address?" do
-    it "returns true if instance variable @_frikandel_did_validate_session_ip_address is true" do
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_validate_session_ip_address, true)
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_true
-    end
-
-    it "returns true if instance variable @_frikandel_did_persist_session_ip_address is true" do
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_persist_session_ip_address, true)
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_true
-    end
-
-    it "returns false if used instance variables aren't true" do
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_false
-      controller.instance_variable_set(:@_frikandel_did_validate_session_ip_address, nil)
-      controller.instance_variable_set(:@_frikandel_did_persist_session_ip_address, nil)
-      controller.send(:frikandel_did_bind_session_to_ip_address?).should be_false
+  context ".reset_session" do
+    it "calls persist_session_timestamp" do
+      controller.should_receive(:persist_session_timestamp).and_call_original
+      controller.send(:reset_session)
     end
   end
 end
