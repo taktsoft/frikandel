@@ -6,12 +6,12 @@ rvm:
   - 2.1.1
   - ruby-head
   - jruby-19mode
-env:
-  - "RAILS_VERSION=3.2.0"
-  - "RAILS_VERSION=4.0.0"
-  - "RAILS_VERSION=4.1.0"
-  - "RAILS_VERSION=master"
+gemfile:
+  - Gemfile.rails-3.2.x
+  - Gemfile.rails-4.0.x
+  - Gemfile.rails-4.1.x
+  - Gemfile.rails-head
 matrix:
   allow_failures:
-    - env: "RAILS_VERSION=master"
     - rvm: ruby-head
+    - gemfile: Gemfile.rails-head
