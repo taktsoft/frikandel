@@ -99,9 +99,9 @@ end
 
 To run the test suite with different rails version by selecting the corresponding gemfile. You can use this one liners:
 
-    $ BUNDLE_GEMFILE=Gemfile.rails-3.2.x bundle update && bundle exec rake spec
-    $ BUNDLE_GEMFILE=Gemfile.rails-4.0.x bundle update && bundle exec rake spec
-    $ BUNDLE_GEMFILE=Gemfile.rails-4.1.x bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=Gemfile.rails-3.2.x && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=Gemfile.rails-4.0.x && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=Gemfile.rails-4.1.x && bundle update && bundle exec rake spec
 
 ## Contributing
 1. Fork it
