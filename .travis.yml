@@ -3,12 +3,14 @@ rvm:
   - "1.9.3"
   - "2.0.0"
   - "2.1.1"
+  - "2.2.0"
   - ruby-head
   - jruby-19mode
 gemfile:
   - Gemfile.rails-3.2.x
   - Gemfile.rails-4.0.x
   - Gemfile.rails-4.1.x
+  - Gemfile.rails-4.2.x
   - Gemfile.rails-head
 matrix:
   allow_failures:
