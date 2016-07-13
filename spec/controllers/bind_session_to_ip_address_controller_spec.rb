@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 require "support/application_controller"
 
 
@@ -136,11 +136,11 @@ describe BindSessionToIpAddressController do
 
       session[:ip_address] = "1.3.3.7"
 
-      controller.send(:ip_address_match_with_current?).should be_true
+      controller.send(:ip_address_match_with_current?).should be_truthy
 
       session[:ip_address] = "7.3.3.1"
 
-      controller.send(:ip_address_match_with_current?).should be_false
+      controller.send(:ip_address_match_with_current?).should be_falsey
     end
   end
 

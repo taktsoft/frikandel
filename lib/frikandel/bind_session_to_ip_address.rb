@@ -1,6 +1,7 @@
 module Frikandel
   module BindSessionToIpAddress
     extend ActiveSupport::Concern
+    include SessionInvalidation
 
     included do
       append_before_filter :validate_session_ip_address

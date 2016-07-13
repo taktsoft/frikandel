@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_helper"
 require "support/application_controller"
 
 
@@ -274,7 +274,7 @@ describe LimitSessionLifetimeController do
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl + 1)
 
-      controller.send(:reached_ttl?).should be_true
+      controller.send(:reached_ttl?).should be_truthy
     end
 
     it "returns false if persisted ttl is equal to configured ttl seconds ago" do
@@ -283,7 +283,7 @@ describe LimitSessionLifetimeController do
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl)
 
-      controller.send(:reached_ttl?).should be_false
+      controller.send(:reached_ttl?).should be_falsey
     end
 
     it "returns false if persisted ttl is greater than configured ttl seconds ago" do
@@ -292,7 +292,7 @@ describe LimitSessionLifetimeController do
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl - 1)
 
-      controller.send(:reached_ttl?).should be_false
+      controller.send(:reached_ttl?).should be_falsey
     end
   end
 
@@ -304,7 +304,7 @@ describe LimitSessionLifetimeController do
 
       session[:max_ttl] = current_time.ago(1)
 
-      controller.send(:reached_max_ttl?).should be_true
+      controller.send(:reached_max_ttl?).should be_truthy
     end
 
     it "returns false if persisted max_ttl is equal to current time" do
@@ -313,7 +313,7 @@ describe LimitSessionLifetimeController do
 
       session[:max_ttl] = current_time
 
-      controller.send(:reached_max_ttl?).should be_false
+      controller.send(:reached_max_ttl?).should be_falsey
     end
 
     it "returns false if persisted max_ttl is greater than current time" do
@@ -322,7 +322,7 @@ describe LimitSessionLifetimeController do
 
       session[:max_ttl] = current_time.since(1)
 
-      controller.send(:reached_max_ttl?).should be_false
+      controller.send(:reached_max_ttl?).should be_falsey
     end
   end
 

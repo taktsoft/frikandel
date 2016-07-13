@@ -1,5 +1,6 @@
-require "spec_helper"
+require "rails_helper"
 require "support/application_controller"
+
 
 class SessionInvalidError < StandardError; end
 
