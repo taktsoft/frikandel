@@ -24,7 +24,7 @@ protected
 end
 
 
-describe LimitSessionLifetimeController do
+RSpec.describe LimitSessionLifetimeController do
   context "requests" do
     it "writes ttl and max_ttl to session" do
       expect(session[:ttl]).to be_nil
@@ -45,8 +45,8 @@ describe LimitSessionLifetimeController do
       expect(session[:ttl]).to be_a(Time)
       expect(session[:max_ttl]).to be_a(Time)
 
-      flash.should_not be_empty
-      flash[:alert].should eql("alert test")
+      expect(flash).not_to be_empty
+      expect(flash[:alert]).to eql("alert test")
     end
 
     it "holds the session for at least .1 seconds" do
@@ -57,8 +57,8 @@ describe LimitSessionLifetimeController do
 
       get :home
 
-      session[:user_id].should be_present
-      session[:user_id].should eq 1337
+      expect(session[:user_id]).to be_present
+      expect(session[:user_id]).to eq 1337
     end
 
     it "destroys the session after SESSION_TTL" do
@@ -69,7 +69,7 @@ describe LimitSessionLifetimeController do
 
       get :home
 
-      session[:user_id].should be_blank
+      expect(session[:user_id]).to be_blank
     end
 
     it "destroys the session after SESSION_MAX_TTL" do
@@ -80,7 +80,7 @@ describe LimitSessionLifetimeController do
 
       get :home
 
-      session[:user_id].should be_blank
+      expect(session[:user_id]).to be_blank
     end
 
     it "is configurable" do
@@ -92,7 +92,7 @@ describe LimitSessionLifetimeController do
 
       get :home
 
-      session[:user_id].should be_blank
+      expect(session[:user_id]).to be_blank
     end
 
 
@@ -103,17 +103,17 @@ describe LimitSessionLifetimeController do
         session.delete(:ttl)
         session[:max_ttl] = "SomeMaxTTL"
 
-        controller.should_receive(:reset_session).and_call_original
-        controller.should_receive(:persist_session_timestamp).and_call_original
+        expect(controller).to receive(:reset_session).and_call_original
+        expect(controller).to receive(:persist_session_timestamp).and_call_original
         get :home
 
-        session[:user_id].should be_blank
-        session[:ip_address].should be_blank
-        session[:ttl].should be_present
-        session[:ttl].should be_a(Time)
-        session[:max_ttl].should be_present
-        session[:max_ttl].should_not eql("SomeMaxTTL")
-        session[:max_ttl].should be_a(Time)
+        expect(session[:user_id]).to be_blank
+        expect(session[:ip_address]).to be_blank
+        expect(session[:ttl]).to be_present
+        expect(session[:ttl]).to be_a(Time)
+        expect(session[:max_ttl]).to be_present
+        expect(session[:max_ttl]).not_to eql("SomeMaxTTL")
+        expect(session[:max_ttl]).to be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
@@ -122,7 +122,7 @@ describe LimitSessionLifetimeController do
 
         get :home
 
-        response.body.should eql("ttl test")
+        expect(response.body).to eql("ttl test")
       end
     end
 
@@ -134,17 +134,17 @@ describe LimitSessionLifetimeController do
         session[:ttl] = "SomeTTL"
         session.delete(:max_ttl)
 
-        controller.should_receive(:reset_session).and_call_original
-        controller.should_receive(:persist_session_timestamp).and_call_original
+        expect(controller).to receive(:reset_session).and_call_original
+        expect(controller).to receive(:persist_session_timestamp).and_call_original
         get :home
 
-        session[:user_id].should be_blank
-        session[:ip_address].should be_blank
-        session[:ttl].should be_present
-        session[:ttl].should_not eql("SomeTTL")
-        session[:ttl].should be_a(Time)
-        session[:max_ttl].should be_present
-        session[:max_ttl].should be_a(Time)
+        expect(session[:user_id]).to be_blank
+        expect(session[:ip_address]).to be_blank
+        expect(session[:ttl]).to be_present
+        expect(session[:ttl]).not_to eql("SomeTTL")
+        expect(session[:ttl]).to be_a(Time)
+        expect(session[:max_ttl]).to be_present
+        expect(session[:max_ttl]).to be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
@@ -153,7 +153,7 @@ describe LimitSessionLifetimeController do
 
         get :home
 
-        response.body.should eql("ttl test")
+        expect(response.body).to eql("ttl test")
       end
     end
 
@@ -165,16 +165,16 @@ describe LimitSessionLifetimeController do
         session.delete(:ttl)
         session.delete(:max_ttl)
 
-        controller.should_receive(:reset_session).and_call_original
-        controller.should_receive(:persist_session_timestamp).and_call_original
+        expect(controller).to receive(:reset_session).and_call_original
+        expect(controller).to receive(:persist_session_timestamp).and_call_original
         get :home
 
-        session[:user_id].should be_blank
-        session[:ip_address].should be_blank
-        session[:ttl].should be_present
-        session[:ttl].should be_a(Time)
-        session[:max_ttl].should be_present
-        session[:max_ttl].should be_a(Time)
+        expect(session[:user_id]).to be_blank
+        expect(session[:ip_address]).to be_blank
+        expect(session[:ttl]).to be_present
+        expect(session[:ttl]).to be_a(Time)
+        expect(session[:max_ttl]).to be_present
+        expect(session[:max_ttl]).to be_a(Time)
       end
 
       it "allows the request to be rendered as normal" do
@@ -183,7 +183,7 @@ describe LimitSessionLifetimeController do
 
         get :home
 
-        response.body.should eql("ttl test")
+        expect(response.body).to eql("ttl test")
       end
     end
   end
@@ -194,10 +194,10 @@ describe LimitSessionLifetimeController do
       session[:ttl] = "SomeTTL"
       session[:max_ttl] = "SomeMaxTTL"
 
-      controller.should_receive(:reached_ttl?).and_return(true)
-      controller.stub(:reached_max_ttl?).and_return(false)
+      expect(controller).to receive(:reached_ttl?).and_return(true)
+      allow(controller).to receive(:reached_max_ttl?).and_return(false)
 
-      controller.should_receive(:on_invalid_session)
+      expect(controller).to receive(:on_invalid_session)
 
       controller.send(:validate_session_timestamp)
     end
@@ -206,10 +206,10 @@ describe LimitSessionLifetimeController do
       session[:ttl] = "SomeTTL"
       session[:max_ttl] = "SomeMaxTTL"
 
-      controller.stub(:reached_ttl?).and_return(false)
-      controller.should_receive(:reached_max_ttl?).and_return(true)
+      allow(controller).to receive(:reached_ttl?).and_return(false)
+      expect(controller).to receive(:reached_max_ttl?).and_return(true)
 
-      controller.should_receive(:on_invalid_session)
+      expect(controller).to receive(:on_invalid_session)
 
       controller.send(:validate_session_timestamp)
     end
@@ -218,10 +218,10 @@ describe LimitSessionLifetimeController do
       session[:ttl] = "SomeTTL"
       session[:max_ttl] = "SomeMaxTTL"
 
-      controller.stub(:reached_ttl?).and_return(true)
-      controller.stub(:reached_max_ttl?).and_return(true)
+      allow(controller).to receive(:reached_ttl?).and_return(true)
+      allow(controller).to receive(:reached_max_ttl?).and_return(true)
 
-      controller.should_receive(:on_invalid_session)
+      expect(controller).to receive(:on_invalid_session)
 
       controller.send(:validate_session_timestamp)
     end
@@ -230,7 +230,7 @@ describe LimitSessionLifetimeController do
       session.delete(:ttl)
       session[:max_ttl] = "SomeMaxTTL"
 
-      controller.should_receive(:reset_session)
+      expect(controller).to receive(:reset_session)
 
       controller.send(:validate_session_timestamp)
     end
@@ -239,7 +239,7 @@ describe LimitSessionLifetimeController do
       session[:ttl] = "SomeTTL"
       session.delete(:max_ttl)
 
-      controller.should_receive(:persist_session_timestamp)
+      expect(controller).to receive(:persist_session_timestamp)
 
       controller.send(:validate_session_timestamp)
     end
@@ -248,7 +248,7 @@ describe LimitSessionLifetimeController do
       session.delete(:ttl)
       session.delete(:max_ttl)
 
-      controller.should_receive(:persist_session_timestamp)
+      expect(controller).to receive(:persist_session_timestamp)
 
       controller.send(:validate_session_timestamp)
     end
@@ -257,10 +257,10 @@ describe LimitSessionLifetimeController do
       session[:ttl] = "SomeTTL"
       session[:max_ttl] = "SomeMaxTTL"
 
-      controller.stub(:reached_ttl?).and_return(false)
-      controller.stub(:reached_max_ttl?).and_return(false)
+      allow(controller).to receive(:reached_ttl?).and_return(false)
+      allow(controller).to receive(:reached_max_ttl?).and_return(false)
 
-      controller.should_receive(:persist_session_timestamp)
+      expect(controller).to receive(:persist_session_timestamp)
 
       controller.send(:validate_session_timestamp)
     end
@@ -270,29 +270,29 @@ describe LimitSessionLifetimeController do
   context ".reached_ttl?" do
     it "returns true if persisted ttl is less than configured ttl seconds ago" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl + 1)
 
-      controller.send(:reached_ttl?).should be_truthy
+      expect(controller.send(:reached_ttl?)).to be_truthy
     end
 
     it "returns false if persisted ttl is equal to configured ttl seconds ago" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl)
 
-      controller.send(:reached_ttl?).should be_falsey
+      expect(controller.send(:reached_ttl?)).to be_falsey
     end
 
     it "returns false if persisted ttl is greater than configured ttl seconds ago" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:ttl] = current_time.ago(Frikandel::Configuration.ttl - 1)
 
-      controller.send(:reached_ttl?).should be_falsey
+      expect(controller.send(:reached_ttl?)).to be_falsey
     end
   end
 
@@ -300,29 +300,29 @@ describe LimitSessionLifetimeController do
   context ".reached_max_ttl?" do
     it "returns true if persisted max_ttl is less than current time" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:max_ttl] = current_time.ago(1)
 
-      controller.send(:reached_max_ttl?).should be_truthy
+      expect(controller.send(:reached_max_ttl?)).to be_truthy
     end
 
     it "returns false if persisted max_ttl is equal to current time" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:max_ttl] = current_time
 
-      controller.send(:reached_max_ttl?).should be_falsey
+      expect(controller.send(:reached_max_ttl?)).to be_falsey
     end
 
     it "returns false if persisted max_ttl is greater than current time" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       session[:max_ttl] = current_time.since(1)
 
-      controller.send(:reached_max_ttl?).should be_falsey
+      expect(controller.send(:reached_max_ttl?)).to be_falsey
     end
   end
 
@@ -330,7 +330,7 @@ describe LimitSessionLifetimeController do
   context ".persist_session_timestamp" do
     it "sets ttl to current time" do
       current_time = Time.now
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       expect {
         controller.send(:persist_session_timestamp)
@@ -342,7 +342,7 @@ describe LimitSessionLifetimeController do
     it "sets max_ttl to configured max_ttl seconds in future if it's blank" do
       current_time = Time.now
       max_ttl_time = current_time.since(Frikandel::Configuration.max_ttl)
-      Time.stub(:now).and_return(current_time)
+      allow(Time).to receive(:now).and_return(current_time)
 
       expect {
         controller.send(:persist_session_timestamp)
@@ -365,7 +365,7 @@ describe LimitSessionLifetimeController do
 
   context ".reset_session" do
     it "calls persist_session_timestamp" do
-      controller.should_receive(:persist_session_timestamp).and_call_original
+      expect(controller).to receive(:persist_session_timestamp).and_call_original
       controller.send(:reset_session)
     end
   end

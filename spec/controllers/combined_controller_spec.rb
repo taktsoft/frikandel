@@ -24,38 +24,38 @@ protected
 end
 
 
-describe CombinedController do
+RSpec.describe CombinedController do
   context "ttl nor ip isn't present in session" do
     it "resets the session and persists ip address, ttl & max_ttl" do
       session[:user_id] = 4337
 
       get :home
 
-      session[:user_id].should be_blank
-      session[:ip_address].should be_present
-      session[:ttl].should be_present
-      session[:max_ttl].should be_present
+      expect(session[:user_id]).to be_blank
+      expect(session[:ip_address]).to be_present
+      expect(session[:ttl]).to be_present
+      expect(session[:max_ttl]).to be_present
     end
 
     it "allows the request to be rendered as normal" do
       get :home
 
-      response.body.should eql("combined test")
+      expect(response.body).to eql("combined test")
     end
 
     it "persists ttl, max_ttl and ip even on redirect in another before filter" do
-      session[:ip_address].should be_nil
-      session[:ttl].should be_nil
-      session[:max_ttl].should be_nil
+      expect(session[:ip_address]).to be_nil
+      expect(session[:ttl]).to be_nil
+      expect(session[:max_ttl]).to be_nil
 
       simulate_redirect!(:redirect_home, :home)
 
-      session[:ip_address].should be_present
-      session[:ttl].should be_present
-      session[:max_ttl].should be_present
+      expect(session[:ip_address]).to be_present
+      expect(session[:ttl]).to be_present
+      expect(session[:max_ttl]).to be_present
 
-      flash.should_not be_empty
-      flash[:alert].should eql("alert test")
+      expect(flash).not_to be_empty
+      expect(flash[:alert]).to eql("alert test")
     end
   end
 
@@ -68,12 +68,12 @@ describe CombinedController do
 
       get :home
 
-      session[:user_id].should be_blank
-      session[:ip_address].should be_present
-      session[:ttl].should be_present
-      session[:ttl].should_not eql(last_ttl)
-      session[:max_ttl].should be_present
-      session[:max_ttl].should_not eql(last_max_ttl)
+      expect(session[:user_id]).to be_blank
+      expect(session[:ip_address]).to be_present
+      expect(session[:ttl]).to be_present
+      expect(session[:ttl]).not_to eql(last_ttl)
+      expect(session[:max_ttl]).to be_present
+      expect(session[:max_ttl]).not_to eql(last_max_ttl)
     end
 
     it "resets the session and persists ip address, ttl & max_ttl if ttl is missing" do
@@ -83,12 +83,12 @@ describe CombinedController do
 
       get :home
 
-      session[:user_id].should be_blank
-      session[:ip_address].should be_present
-      session[:ip_address].should eql("0.0.0.0")
-      session[:ttl].should be_present
-      session[:max_ttl].should be_present
-      session[:max_ttl].should_not eql(last_max_ttl)
+      expect(session[:user_id]).to be_blank
+      expect(session[:ip_address]).to be_present
+      expect(session[:ip_address]).to eql("0.0.0.0")
+      expect(session[:ttl]).to be_present
+      expect(session[:max_ttl]).to be_present
+      expect(session[:max_ttl]).not_to eql(last_max_ttl)
     end
 
     it "resets the session and persists ip address, ttl & max_ttl if max_ttl is missing" do
@@ -98,12 +98,12 @@ describe CombinedController do
 
       get :home
 
-      session[:user_id].should be_blank
-      session[:ip_address].should be_present
-      session[:ip_address].should eql("0.0.0.0")
-      session[:ttl].should be_present
-      session[:ttl].should_not eql(last_ttl)
-      session[:max_ttl].should be_present
+      expect(session[:user_id]).to be_blank
+      expect(session[:ip_address]).to be_present
+      expect(session[:ip_address]).to eql("0.0.0.0")
+      expect(session[:ttl]).to be_present
+      expect(session[:ttl]).not_to eql(last_ttl)
+      expect(session[:max_ttl]).to be_present
     end
   end
 end

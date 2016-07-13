@@ -23,7 +23,7 @@ protected
 end
 
 
-describe BindSessionToIpAddressController do
+RSpec.describe BindSessionToIpAddressController do
   context "requests" do
     it "writes current ip address to session" do
       expect(session[:ip_address]).to be_nil
@@ -40,13 +40,13 @@ describe BindSessionToIpAddressController do
 
       expect(session[:ip_address]).to eql("0.0.0.0")
 
-      flash.should_not be_empty
-      flash[:alert].should eql("alert test")
+      expect(flash).not_to be_empty
+      expect(flash[:alert]).to eql("alert test")
     end
 
     it "raises an exception if session address and current ip address don't match" do
       session[:ip_address] = "1.2.3.4"
-      controller.should_receive(:on_invalid_session)
+      expect(controller).to receive(:on_invalid_session)
 
       get :home
     end
@@ -59,21 +59,21 @@ describe BindSessionToIpAddressController do
         session[:ttl] = "SomeTTL"
         session[:max_ttl] = "SomeMaxTTL"
 
-        controller.should_receive(:reset_session).and_call_original
-        controller.should_receive(:persist_session_ip_address).and_call_original
+        expect(controller).to receive(:reset_session).and_call_original
+        expect(controller).to receive(:persist_session_ip_address).and_call_original
         get :home
 
-        session[:user_id].should be_blank
-        session[:ip_address].should be_present
-        session[:ip_address].should eql("0.0.0.0")
-        session[:ttl].should be_blank
-        session[:max_ttl].should be_blank
+        expect(session[:user_id]).to be_blank
+        expect(session[:ip_address]).to be_present
+        expect(session[:ip_address]).to eql("0.0.0.0")
+        expect(session[:ttl]).to be_blank
+        expect(session[:max_ttl]).to be_blank
       end
 
       it "allows the request to be rendered as normal" do
         get :home
 
-        response.body.should eql("bind test")
+        expect(response.body).to eql("bind test")
       end
     end
   end
@@ -83,8 +83,8 @@ describe BindSessionToIpAddressController do
     it "calls on_invalid_session if ip address doesn't match with current" do
       session[:ip_address] = "1.3.3.7"
 
-      controller.should_receive(:ip_address_match_with_current?).and_return(false)
-      controller.should_receive(:on_invalid_session)
+      expect(controller).to receive(:ip_address_match_with_current?).and_return(false)
+      expect(controller).to receive(:on_invalid_session)
 
       controller.send(:validate_session_ip_address)
     end
@@ -92,8 +92,8 @@ describe BindSessionToIpAddressController do
     it "calls reset_session if ip address isn't persisted in session" do
       session.delete(:ip_address)
 
-      controller.should_not_receive(:ip_address_match_with_current?)
-      controller.should_receive(:reset_session)
+      expect(controller).not_to receive(:ip_address_match_with_current?)
+      expect(controller).to receive(:reset_session)
 
       controller.send(:validate_session_ip_address)
     end
@@ -101,8 +101,8 @@ describe BindSessionToIpAddressController do
     it "calls persist_session_ip_address if validation passes" do
       session[:ip_address] = "1.3.3.7"
 
-      controller.should_receive(:ip_address_match_with_current?).and_return(true)
-      controller.should_receive(:persist_session_ip_address)
+      expect(controller).to receive(:ip_address_match_with_current?).and_return(true)
+      expect(controller).to receive(:persist_session_ip_address)
 
       controller.send(:validate_session_ip_address)
     end
@@ -112,7 +112,7 @@ describe BindSessionToIpAddressController do
   context ".persist_session_ip_address" do
     it "sets the current ip address in session on key ip_address" do
       expect {
-        controller.should_receive(:current_ip_address).and_return("1.3.3.7")
+        expect(controller).to receive(:current_ip_address).and_return("1.3.3.7")
         controller.send(:persist_session_ip_address)
       }.to change {
         session[:ip_address]
@@ -123,31 +123,31 @@ describe BindSessionToIpAddressController do
 
   context ".current_ip_address" do
     it "returns the remote_ip from request" do
-      request.should_receive(:remote_ip).and_return(:request_remote_ip)
+      expect(request).to receive(:remote_ip).and_return(:request_remote_ip)
 
-      controller.send(:current_ip_address).should eql(:request_remote_ip)
+      expect(controller.send(:current_ip_address)).to eql(:request_remote_ip)
     end
   end
 
 
   context ".ip_address_match_with_current?" do
     it "compares ip address from session with the current ip address" do
-      controller.stub(:current_ip_address).and_return("1.3.3.7")
+      allow(controller).to receive(:current_ip_address).and_return("1.3.3.7")
 
       session[:ip_address] = "1.3.3.7"
 
-      controller.send(:ip_address_match_with_current?).should be_truthy
+      expect(controller.send(:ip_address_match_with_current?)).to be_truthy
 
       session[:ip_address] = "7.3.3.1"
 
-      controller.send(:ip_address_match_with_current?).should be_falsey
+      expect(controller.send(:ip_address_match_with_current?)).to be_falsey
     end
   end
 
 
   context ".reset_session" do
     it "calls persist_session_ip_address" do
-      controller.should_receive(:persist_session_ip_address).and_call_original
+      expect(controller).to receive(:persist_session_ip_address).and_call_original
       controller.send(:reset_session)
     end
   end

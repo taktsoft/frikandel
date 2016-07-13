@@ -13,8 +13,8 @@ class CustomizedOnInvalidSessionController < ApplicationController
   alias my_on_invalid_session on_invalid_session
 end
 
-describe CustomizedOnInvalidSessionController do
 
+RSpec.describe CustomizedOnInvalidSessionController do
   it "uses the overwritten on_invalid_cookie function" do
     get :home
     request.session[:max_ttl] = 1.minute.ago
