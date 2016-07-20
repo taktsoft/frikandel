@@ -1,9 +1,10 @@
 language: ruby
 rvm:
-  - "1.9.3"
-  - "2.0.0"
-  - "2.1.1"
-  - "2.2.0"
+  - "1.9"
+  - "2.0"
+  - "2.1"
+  - "2.2"
+  - "2.3"
   - ruby-head
   - jruby-19mode
 gemfile:
@@ -13,18 +14,20 @@ gemfile:
   - Gemfile.rails-4.2.x
   - Gemfile.rails-5.0.x
   - Gemfile.rails-head
+before_install:
+  - gem install bundler
 matrix:
   allow_failures:
     - rvm: ruby-head
     - gemfile: Gemfile.rails-head
   exclude:
-    - rvm: "2.2.0"
+    - rvm: "2.2"
       gemfile: Gemfile.rails-3.2.x
-    - rvm: "2.2.0"
+    - rvm: "2.2"
       gemfile: Gemfile.rails-4.0.x
-    - rvm: "1.9.3"
+    - rvm: "1.9"
       gemfile: Gemfile.rails-5.0.x
-    - rvm: "2.0.0"
+    - rvm: "2.0"
       gemfile: Gemfile.rails-5.0.x
-    - rvm: "2.1.1"
+    - rvm: "2.1"
       gemfile: Gemfile.rails-5.0.x
