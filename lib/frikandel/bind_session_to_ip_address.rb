@@ -4,7 +4,11 @@ module Frikandel
     include SessionInvalidation
 
     included do
-      append_before_filter :validate_session_ip_address
+      if respond_to?(:before_action)
+        append_before_action :validate_session_ip_address
+      else
+        append_before_filter :validate_session_ip_address
+      end
     end
 
   private

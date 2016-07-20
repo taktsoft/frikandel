@@ -5,10 +5,18 @@ require "support/application_controller"
 class BindSessionToIpAddressController < ApplicationController
   include Frikandel::BindSessionToIpAddress
 
-  before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  if respond_to?(:before_action)
+    before_action :flash_alert_and_redirect_home, only: [:redirect_home]
+  else
+    before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  end
 
   def home
-    render text: "bind test"
+    if Rails::VERSION::MAJOR >= 5
+      render plain: "bind test"
+    else
+      render text: "bind test"
+    end
   end
 
   def redirect_home

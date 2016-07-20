@@ -4,7 +4,11 @@ module Frikandel
     include SessionInvalidation
 
     included do
-      append_before_filter :validate_session_timestamp
+      if respond_to?(:before_action)
+        append_before_action :validate_session_timestamp
+      else
+        append_before_filter :validate_session_timestamp
+      end
     end
 
   private

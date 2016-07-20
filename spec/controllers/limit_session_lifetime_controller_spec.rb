@@ -5,10 +5,18 @@ require "support/application_controller"
 class LimitSessionLifetimeController < ApplicationController
   include Frikandel::LimitSessionLifetime
 
-  before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  if respond_to?(:before_action)
+    before_action :flash_alert_and_redirect_home, only: [:redirect_home]
+  else
+    before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  end
 
   def home
-    render text: "ttl test"
+    if Rails::VERSION::MAJOR >= 5
+      render plain: "ttl test"
+    else
+      render text: "ttl test"
+    end
   end
 
   def redirect_home

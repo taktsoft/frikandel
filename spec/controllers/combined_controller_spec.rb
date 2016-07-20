@@ -6,10 +6,18 @@ class CombinedController < ApplicationController
   include Frikandel::LimitSessionLifetime
   include Frikandel::BindSessionToIpAddress
 
-  before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  if respond_to?(:before_action)
+    before_action :flash_alert_and_redirect_home, only: [:redirect_home]
+  else
+    before_filter :flash_alert_and_redirect_home, only: [:redirect_home]
+  end
 
   def home
-    render text: "combined test"
+    if Rails::VERSION::MAJOR >= 5
+      render plain: "combined test"
+    else
+      render text: "combined test"
+    end
   end
 
   def redirect_home
