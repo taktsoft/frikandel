@@ -22,3 +22,9 @@ matrix:
       gemfile: Gemfile.rails-3.2.x
     - rvm: "2.2.0"
       gemfile: Gemfile.rails-4.0.x
+    - rvm: "1.9.3"
+      gemfile: Gemfile.rails-5.0.x
+    - rvm: "2.0.0"
+      gemfile: Gemfile.rails-5.0.x
+    - rvm: "2.1.1"
+      gemfile: Gemfile.rails-5.0.x
