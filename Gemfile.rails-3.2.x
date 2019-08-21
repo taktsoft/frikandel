@@ -6,3 +6,4 @@ gemspec
 gem 'rails', '~> 3.2.0'
 gem 'mime-types', '< 3.0'
 gem 'listen', '< 3.1'
+gem 'sqlite3', '~> 1.3.6'
