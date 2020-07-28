@@ -4,5 +4,3 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rails', '~> 5.2.0'
-gem 'sqlite3', '~> 1.3.6'
-gem 'sprockets', '~> 3.7.2'
