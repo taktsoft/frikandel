@@ -5,6 +5,7 @@
 .ruby-*
 .yardoc
 Gemfile*.lock
+*.gemfile.lock
 InstalledFiles
 _yardoc
 coverage

@@ -1,6 +1,6 @@
 # Frikandel
 [![Gem Version](https://badge.fury.io/rb/frikandel.png)](http://badge.fury.io/rb/frikandel)
-[![Build Status](https://api.travis-ci.org/taktsoft/frikandel.png)](https://travis-ci.org/taktsoft/frikandel)
+[![Build Status](https://github.com/taktsoft/frikandel/actions/workflows/ci.yml/badge.svg)](https://github.com/taktsoft/frikandel/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/taktsoft/frikandel.png)](https://codeclimate.com/github/taktsoft/frikandel)
 [![Dependency Status](https://gemnasium.com/taktsoft/frikandel.svg)](https://gemnasium.com/taktsoft/frikandel)
 
@@ -18,7 +18,7 @@ By adding a TTL the attack window gets smaller. An stolen has to be used within 
 
 ## Requirements
 
-Rails 3.2 and 4.x are currently supported.
+Rails 5.2 and 6.x are currently supported.
 
 
 ## Installation
@@ -93,20 +93,19 @@ end
 
 ## Changes
 
+2.3.0 -- Add support for Rails v5.1 and Rails v6.0 and fix TravisCI builds
+2.2.0 -- Add support for Rails v5.0 and update to RSpec 3
 2.1.0 -- Reset session only once if using the combination of TTL and IP address binding.
 2.0.0 -- Added IP address binding. Renamed callback from 'on_expired_session' to 'on_invalid_session'.
 
 ## Test
 
-To run the test suite with different rails version by selecting the corresponding gemfile. You can use this one liners:
+To run the test suite with different rails version by selecting the corresponding gemfile. You can use these one liners:
 
-    $ export BUNDLE_GEMFILE=Gemfile.rails-3.2.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-4.0.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-4.1.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-4.2.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-5.0.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-5.1.x && bundle update && bundle exec rake spec
-    $ export BUNDLE_GEMFILE=Gemfile.rails-5.2.x && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=gemfiles/rails-5.2.x.gemfile && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=gemfiles/rails-6.0.x.gemfile && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=gemfiles/rails-6.1.x.gemfile && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=gemfiles/rails-head.gemfile && bundle update && bundle exec rake spec
 
 ## Contributing
 1. Fork it
