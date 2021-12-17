@@ -31,5 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "test-unit"
 
-  spec.add_dependency "rails", ">= 5.2.0", "< 7.0.0"
+  spec.add_dependency "rails", ">= 5.2.0", "< 8.0.0"
 end

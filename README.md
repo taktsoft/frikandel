@@ -18,7 +18,7 @@ By adding a TTL the attack window gets smaller. An stolen has to be used within 
 
 ## Requirements
 
-Rails 5.2 and 6.x are currently supported.
+Rails 5.2 and 6.x and 7.0 are currently supported.
 
 
 ## Installation
