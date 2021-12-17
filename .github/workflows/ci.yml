@@ -20,6 +20,7 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         ruby-version: ['2.6', '2.7', '3.0', jruby, truffleruby]
         gemfile: [rails-5.2.x, rails-6.0.x, rails-6.1.x, rails-7.0.x]
