@@ -28,8 +28,12 @@ jobs:
           # ruby 3 is not compatible with rails < 6
           - ruby-version: '3.0'
             gemfile: rails-5.2.x
+          - ruby-version: 'truffleruby'
+            gemfile: rails-5.2.x
           # ruby < 2.7 is not compatible with rails 7
           - ruby-version: '2.6'
+            gemfile: rails-7.0.x
+          - ruby-version: 'jruby'
             gemfile: rails-7.0.x
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
