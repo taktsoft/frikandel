@@ -107,6 +107,7 @@ To run the test suite with different rails version by selecting the correspondin
     $ export BUNDLE_GEMFILE=gemfiles/rails-5.2.x.gemfile && bundle update && bundle exec rake spec
     $ export BUNDLE_GEMFILE=gemfiles/rails-6.0.x.gemfile && bundle update && bundle exec rake spec
     $ export BUNDLE_GEMFILE=gemfiles/rails-6.1.x.gemfile && bundle update && bundle exec rake spec
+    $ export BUNDLE_GEMFILE=gemfiles/rails-7.0.x.gemfile && bundle update && bundle exec rake spec
     $ export BUNDLE_GEMFILE=gemfiles/rails-head.gemfile && bundle update && bundle exec rake spec
 
 ## Contributing
