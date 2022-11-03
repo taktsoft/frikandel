@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/taktsoft/frikandel"
   spec.license       = "MIT"
+  spec.metadata      = { "rubygems_mfa_required" => "true" }
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
