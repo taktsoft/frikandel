@@ -91,6 +91,7 @@ end
 
 ## Changes
 
+* v3.0.2 -- Add support for Ruby 3.1 and add DevContainer setup for development
 * v3.0.1 -- Add support for Rails v7.x
 * v3.0.0 -- Drop support for Rails < v5.2, add support for Rails v6.1 and switch from TravisCI to GithubActions
 * v2.3.0 -- Add support for Rails v5.1 and Rails v6.0 and fix TravisCI builds
