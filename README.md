@@ -1,8 +1,6 @@
 # Frikandel
 [![Gem Version](https://badge.fury.io/rb/frikandel.png)](http://badge.fury.io/rb/frikandel)
 [![Build Status](https://github.com/taktsoft/frikandel/actions/workflows/ci.yml/badge.svg)](https://github.com/taktsoft/frikandel/actions/workflows/ci.yml)
-[![Code Climate](https://codeclimate.com/github/taktsoft/frikandel.png)](https://codeclimate.com/github/taktsoft/frikandel)
-[![Dependency Status](https://gemnasium.com/taktsoft/frikandel.svg)](https://gemnasium.com/taktsoft/frikandel)
 
 This gem aims to improve the security of your rails application. It allows you to add a TTL (Time To Live) to the session cookie and allows you to bind the session to an IP address.
 
