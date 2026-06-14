@@ -8,7 +8,7 @@ require "frikandel"
 
 module Dummy
   class Application < Rails::Application
-    config.load_defaults Rails::VERSION::STRING.to_f
+    config.load_defaults "#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}"
     config.eager_load = false
 
     # Static secret for the test suite only — not a real credential.
