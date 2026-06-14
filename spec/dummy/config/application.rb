@@ -1,30 +1,17 @@
 require File.expand_path('../boot', __FILE__)
 
-# Pick the frameworks you want:
-require "active_record/railtie"
+# Only the frameworks the gem actually needs.
 require "action_controller/railtie"
-require "action_mailer/railtie"
-require "sprockets/railtie"
-# require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
 require "frikandel"
 
 module Dummy
-  RAILS_GEM_VERSION = Gem::Version.new(Rails::VERSION::STRING).freeze
-
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    config.load_defaults Rails::VERSION::STRING.to_f
+    config.eager_load = false
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    # Static secret for the test suite only — not a real credential.
+    config.secret_key_base = "dummy_secret_key_base_for_the_frikandel_test_suite_only"
   end
 end
-
