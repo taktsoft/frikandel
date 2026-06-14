@@ -91,7 +91,7 @@ end
 
 ## Changes
 
-* v4.0.0 -- Drop support for Rails < 7.2 and Ruby < 3.2, add support for Rails 7.2 and 8.0, rebuild the test suite (RSpec + Appraisal, no ActiveRecord)
+* v4.0.0 -- Drop support for Rails < 7.2 and Ruby < 3.2, add support for Rails 7.2, 8.0 and 8.1, rebuild the test suite (RSpec + Appraisal, no ActiveRecord)
 * v3.0.2 -- Add support for Ruby 3.1 and add DevContainer setup for development
 * v3.0.1 -- Add support for Rails v7.x
 * v3.0.0 -- Drop support for Rails < v5.2, add support for Rails v6.1 and switch from TravisCI to GithubActions
@@ -107,6 +107,7 @@ To run the test suite with different rails version by selecting the correspondin
     $ bundle exec appraisal install
     $ bundle exec appraisal rails-7.2 rake
     $ bundle exec appraisal rails-8.0 rake
+    $ bundle exec appraisal rails-8.1 rake
     $ bundle exec appraisal rails-head rake
 
 ## Contributing
