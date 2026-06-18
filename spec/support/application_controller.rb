@@ -14,11 +14,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def home
-
-    if Rails::VERSION::MAJOR >= 5
-      render plain: "testing"
-    else
-      render text: "testing"
-    end
+    render plain: "testing"
   end
 end
